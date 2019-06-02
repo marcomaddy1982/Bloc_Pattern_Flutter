@@ -7,24 +7,22 @@ import 'package:rxdart/rxdart.dart';
 class FilmBloc {
   FilmRepository filmRepository;
 
-  Sink<bool> get film => _filmStream.sink;
-  final _filmStream = BehaviorSubject<bool>();
-
+  final _filmStream = BehaviorSubject<void>.seeded(null);
   Stream<FilmState> films;
 
   FilmBloc(this.filmRepository) {
     films = _filmStream.stream
-        .flatMap(_search);
+    .flatMap(_start);
   }
 
   void dispose() {
     _filmStream.close();
   }
 
-  Stream<FilmState> _search(bool query) async* {
+  Stream<FilmState> _start(void value) async* {
     yield FilmState(loading: true);
     try {
-      final films = await filmRepository.getFilms(query);
+      final films = await filmRepository.getFilms();
       yield FilmState(films: films);
     } catch (e) {
       yield FilmState(error: true);

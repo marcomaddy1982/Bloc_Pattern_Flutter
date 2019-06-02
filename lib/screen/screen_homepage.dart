@@ -7,9 +7,7 @@ import 'package:flutter_simple_dependency_injection/injector.dart';
 class HomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    var filmBloc = Injector.getInjector().get<FilmBloc>();
-    filmBloc.film.add(false);
-    return HomePageState(filmBloc);
+    return HomePageState(Injector.getInjector().get<FilmBloc>());
   }
 }
 
